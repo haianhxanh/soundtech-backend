@@ -12,6 +12,7 @@ import { product_update_tags } from "../controller/product-update-tags.controlle
 import { tags_add } from "../controller/tags-add.controller";
 import { transfers } from "../controller/transfers.controller";
 import { transfer_invoice } from "../controller/transfer-invoice.controller";
+import { product_tags_add } from "../controller/product-tags-add.controller";
 
 const router = express.Router();
 
@@ -26,6 +27,7 @@ router.get("/products/update/tags", product_update_tags);
 router.get("/product-import", product_import);
 router.get("/product-import/variants", product_import_with_variants);
 router.get("/products/tags/add", tags_add);
+router.get("/product/tags/add", product_tags_add);
 router.get("/transfers", transfers);
 router.post("/transfer/invoice", transfer_invoice);
 
