@@ -27,7 +27,7 @@ router.get("/products/update/tags", product_update_tags);
 router.get("/product-import", product_import);
 router.get("/product-import/variants", product_import_with_variants);
 router.get("/products/tags/add", tags_add);
-router.get("/product/tags/add", product_tags_add);
+router.post("/product/tags/add", product_tags_add);
 router.get("/transfers", transfers);
 router.post("/transfer/invoice", transfer_invoice);
 
