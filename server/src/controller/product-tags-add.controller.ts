@@ -23,7 +23,9 @@ export const product_tags_add = async (req: Request, res: Response) => {
     }
   );
 
-  return res.json(req.body);
+  console.log(req.body);
+
+  return res.status(200).json({ message: "Product tags added" });
   let tags = "";
   let productId = req?.body?.id;
   let product = await client.request(productQuery, {
