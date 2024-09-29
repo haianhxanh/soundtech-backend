@@ -53,7 +53,7 @@ export const product_tags_add = async (req: Request, res: Response) => {
           tags += "m_" + item + ",";
         });
       } else {
-        tags += "m_" + hasSpec.node.value;
+        tags += "m_" + hasSpec.node.value + ",";
       }
     }
   }
