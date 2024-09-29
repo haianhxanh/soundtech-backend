@@ -24,7 +24,7 @@ export const product_tags_add = async (req: Request, res: Response) => {
   );
 
   let productId = req?.body?.admin_graphql_api_id;
-  // productId = "gid://shopify/Product/8580532863233";
+  // productId = "gid://shopify/Product/8580532797697";
 
   let tags = "";
   let product = await client.request(productQuery, {
@@ -40,11 +40,24 @@ export const product_tags_add = async (req: Request, res: Response) => {
       (meta: any) =>
         meta.node.namespace == specNamespace && meta.node.key == specKey
     );
+
     if (hasSpec) {
-      tags +=
-        "m_" + hasSpec.node.value.replace('["', "").replace('"]', "") + ",";
+      if (hasSpec.node.value.includes("[")) {
+        const string = hasSpec.node.value
+          .replace('["', "")
+          .replace('"]', "")
+          .replaceAll('"', "");
+
+        const array = string.split(",");
+        array.forEach((item: string) => {
+          tags += "m_" + item + ",";
+        });
+      } else {
+        tags += "m_" + hasSpec.node.value;
+      }
     }
   }
+
   tags += "Tags added";
   console.log(productId, tags);
   const newTags = await client.request(tagsAddMutation, {
