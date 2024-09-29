@@ -4,8 +4,9 @@ import { promisify } from "util";
 import { GraphQLClient } from "graphql-request";
 import { tagsAddMutation } from "../queries/tagsAdd";
 import { productQuery } from "../queries/product";
+import { tagsRemoveMutation } from "../queries/tagsRemove";
 const sleep = promisify(setTimeout);
-const sleepTime = 500;
+const sleepTime = 300;
 dotenv.config();
 
 const { ACCESS_TOKEN, STORE, API_VERSION } = process.env;
@@ -24,12 +25,23 @@ export const product_tags_add = async (req: Request, res: Response) => {
   );
 
   let productId = req?.body?.admin_graphql_api_id;
-  // productId = "gid://shopify/Product/8580532797697";
+  productId = "gid://shopify/Product/8580532797697";
 
   let tags = "";
   let product = await client.request(productQuery, {
     id: productId,
   });
+
+  let tagsToRemove = product?.product?.tags?.filter((tag: string) =>
+    tag.startsWith("m_")
+  );
+
+  const removedTags = await client.request(tagsRemoveMutation, {
+    id: productId,
+    tags: tagsToRemove,
+  });
+
+  sleep(sleepTime);
 
   let productMetafields = product?.product?.metafields.edges;
 
