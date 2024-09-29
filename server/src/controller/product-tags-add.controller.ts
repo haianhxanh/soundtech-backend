@@ -80,16 +80,26 @@ export const product_tags_add = async (req: Request, res: Response) => {
 };
 
 const specs = [
+  "specs.size",
+  "specs.series",
   "specs.channels",
+  "specs.watts_rms",
+  "specs.voice_coil_x_impedance",
+  "specs.rca_input",
+  "specs.high_level_input",
+  "specs.sensitivity",
+  "specs.installation_depth",
+  "specs.operational_voltage2",
+  "specs.car_specific",
   "amp.built_in_dsp",
   "amp.power_rms_per_speaker_channel",
   "amp.power_rms_for_subwoofer",
   "specs.operational_voltage2",
   "spk.series",
   "spk.type",
-  "specs.car_specific",
   "sub.unit_type",
-  "specs.size",
+  "sub.recommended_sealed_box_l",
+  "sub.recommended_vented_box_l",
   "acc.application",
   "acc.type",
 ];
