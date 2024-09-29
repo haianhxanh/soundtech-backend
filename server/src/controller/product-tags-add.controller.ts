@@ -24,16 +24,19 @@ export const product_tags_add = async (req: Request, res: Response) => {
   );
 
   let productId = req?.body?.admin_graphql_api_id;
+  // productId = "gid://shopify/Product/8580532863233";
 
   let tags = "";
   let product = await client.request(productQuery, {
     id: productId,
   });
-  let productMetafields = product?.node?.metafields.edges;
+
+  let productMetafields = product?.product?.metafields.edges;
+
   for (const [index, spec] of specs.entries()) {
     let specNamespace = spec.split(".")[0];
     let specKey = spec.split(".")[1];
-    let hasSpec = productMetafields.find(
+    let hasSpec = productMetafields?.find(
       (meta: any) =>
         meta.node.namespace == specNamespace && meta.node.key == specKey
     );
