@@ -124,7 +124,7 @@ export const transfer_invoice = async (req: Request, res: Response) => {
 
     if (!response.ok) {
       const errorResponse = await response.json();
-      return res.status(response.status).json({ error: errorResponse });
+      return res.status(200).json({ errorResponse });
     }
     const jsonResponse = await response.json();
     return res.status(200).json(jsonResponse);

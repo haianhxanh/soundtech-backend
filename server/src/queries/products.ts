@@ -7,6 +7,7 @@ export const productsQuery = gql`
         node {
           id
           tags
+          updatedAt
           metafields(first: 100) {
             edges {
               node {

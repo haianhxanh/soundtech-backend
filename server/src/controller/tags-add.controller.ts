@@ -1,9 +1,14 @@
-import { Request, Response } from "express";
+import { query, Request, Response } from "express";
 import dotenv from "dotenv";
 import { promisify } from "util";
 import { GraphQLClient } from "graphql-request";
 import { productsQuery } from "../queries/products";
 import { tagsAddMutation } from "../queries/tagsAdd";
+import {
+  getCurrentTimeISO,
+  getCurrentTimeReducedByHours,
+} from "../utils/helpers";
+import { tagsRemoveMutation } from "../queries/tagsRemove";
 const sleep = promisify(setTimeout);
 const sleepTime = 500;
 dotenv.config();
@@ -24,14 +29,28 @@ export const tags_add = async (req: Request, res: Response) => {
     }
   );
 
+  const currentTimeMinusHours = getCurrentTimeReducedByHours(0.5);
+  console.log(currentTimeMinusHours);
+
   const products = await client.request(productsQuery, {
-    query: "tag_not:'Tags added' AND status:'ACTIVE,DRAFT'",
+    query: `updated_at:>${currentTimeMinusHours}`,
   });
 
   for (const [index, product] of products.products.edges.entries()) {
     let tags = "";
     let productId = product?.node?.id;
     let productMetafields = product?.node?.metafields.edges;
+
+    let tagsToRemove = product?.node?.tags?.filter((tag: string) =>
+      tag.startsWith("m_")
+    );
+    const removedTags = await client.request(tagsRemoveMutation, {
+      id: productId,
+      tags: tagsToRemove,
+    });
+
+    sleep(sleepTime);
+
     for (const [index, spec] of specs.entries()) {
       let specNamespace = spec.split(".")[0];
       let specKey = spec.split(".")[1];
@@ -58,16 +77,26 @@ export const tags_add = async (req: Request, res: Response) => {
 };
 
 const specs = [
+  "specs.size",
+  "specs.series",
   "specs.channels",
+  "specs.watts_rms",
+  "specs.voice_coil_x_impedance",
+  "specs.rca_input",
+  "specs.high_level_input",
+  "specs.sensitivity",
+  "specs.installation_depth",
+  "specs.operational_voltage2",
+  "specs.car_specific",
   "amp.built_in_dsp",
   "amp.power_rms_per_speaker_channel",
   "amp.power_rms_for_subwoofer",
   "specs.operational_voltage2",
   "spk.series",
   "spk.type",
-  "specs.car_specific",
   "sub.unit_type",
-  "specs.size",
+  "sub.recommended_sealed_box_l",
+  "sub.recommended_vented_box_l",
   "acc.application",
   "acc.type",
 ];
