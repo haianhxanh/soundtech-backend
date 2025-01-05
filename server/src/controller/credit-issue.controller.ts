@@ -91,6 +91,6 @@ export const credit_issue = async (req: Request, res: Response) => {
     }
     return res.status(200).json(creditMutation);
   } catch (error) {
-    return res.status(500).json({ error });
+    return res.status(200).json({ error });
   }
 };
