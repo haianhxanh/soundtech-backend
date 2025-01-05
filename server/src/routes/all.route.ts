@@ -13,6 +13,7 @@ import { tags_add } from "../controller/tags-add.controller";
 import { transfers } from "../controller/transfers.controller";
 import { transfer_invoice } from "../controller/transfer-invoice.controller";
 import { product_tags_add } from "../controller/product-tags-add.controller";
+import { credit_issue } from "../controller/credit-issue.controller";
 
 const router = express.Router();
 
@@ -30,5 +31,6 @@ router.get("/products/tags/add", tags_add);
 router.post("/product/tags/add", product_tags_add);
 router.get("/transfers", transfers);
 router.post("/transfer/invoice", transfer_invoice);
+router.post("/credit/issue", credit_issue);
 
 export default router;
