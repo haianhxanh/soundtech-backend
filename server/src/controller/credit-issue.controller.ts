@@ -39,6 +39,7 @@ export const credit_issue = async (req: Request, res: Response) => {
       name.includes("Bank")
     );
     if (!isBankPayment) {
+      console.log(`Order ${orderId} not paid by bank`);
       return res
         .status(200)
         .json({ message: `Order ${orderId} not paid by bank` });
@@ -89,8 +90,10 @@ export const credit_issue = async (req: Request, res: Response) => {
     } catch (error) {
       console.error(error);
     }
+    console.log(creditMutation);
     return res.status(200).json(creditMutation);
   } catch (error) {
+    console.log(error);
     return res.status(200).json({ error });
   }
 };
