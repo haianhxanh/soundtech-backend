@@ -5,6 +5,7 @@ import { promisify } from "util";
 import { orderQuery } from "../queries/order";
 import { storeCreditAccountCreditMutation } from "../queries/storeCreditAccountCredit";
 import axios from "axios";
+import { metafieldsSetQuery } from "../queries/metafieldsSet";
 const sleep = promisify(setTimeout);
 dotenv.config();
 const {
@@ -90,8 +91,37 @@ export const credit_issue = async (req: Request, res: Response) => {
     } catch (error) {
       console.error(error);
     }
-    console.log(creditMutation);
-    return res.status(200).json(creditMutation);
+
+    if (creditMutation.storeCreditAccountCredit.userErrors.length > 0) {
+      console.log(creditMutation.storeCreditAccountCredit.userErrors);
+
+      return res.status(200).json({
+        error: creditMutation.storeCreditAccountCredit.userErrors,
+      });
+    }
+
+    let storeCreditAmount =
+      creditMutation.storeCreditAccountCredit.storeCreditAccountTransaction
+        .account.balance.amount;
+
+    let updateCreditMetafield = await client.request(metafieldsSetQuery, {
+      metafields: [
+        {
+          namespace: "store",
+          key: "credit",
+          value: storeCreditAmount,
+          ownerId: customerId,
+          type: "number_decimal",
+        },
+      ],
+    });
+
+    console.log(creditMutation, updateCreditMetafield);
+
+    return res.status(200).json({
+      creditMutation,
+      updateCreditMetafield,
+    });
   } catch (error) {
     console.log(error);
     return res.status(200).json({ error });

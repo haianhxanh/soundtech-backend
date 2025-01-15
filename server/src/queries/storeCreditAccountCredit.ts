@@ -26,3 +26,14 @@ export const storeCreditAccountCreditMutation = gql`
     }
   }
 `;
+
+export const storeCreditAccountQuery = gql`
+  query storeCreditAccount($accountId: ID!) {
+    storeCreditAccount(id: $accountId) {
+      id
+      balance {
+        amount
+      }
+    }
+  }
+`;
