@@ -24,6 +24,16 @@ export const productVariantQuery = gql`
               }
             }
           }
+          metafields(first: 100) {
+            edges {
+              node {
+                id
+                key
+                value
+                namespace
+              }
+            }
+          }
           product {
             id
             tags
